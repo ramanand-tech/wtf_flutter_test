@@ -4,6 +4,7 @@ import 'package:http/http.dart' as http;
 
 import '../services/sync_config.dart';
 import '../utils/app_logger.dart';
+import '../utils/perf_tracker.dart';
 
 class RtcTokenResponse {
   const RtcTokenResponse({
@@ -46,9 +47,11 @@ class RtcTokenService {
       },
     );
     AppLogger.instance.log(LogTag.rtc, 'Fetching token for $userId as $role');
+    PerfTracker.mark(PerfMarks.rtcJoin);
     final res = await http.get(uri).timeout(const Duration(seconds: 8));
     if (res.statusCode == 200) {
       final json = jsonDecode(res.body) as Map<String, dynamic>;
+      PerfTracker.report(PerfMarks.rtcJoin, budgetMs: PerfBudgets.rtcJoinMs);
       return RtcTokenResponse.fromJson(json);
     }
     final body = res.body;

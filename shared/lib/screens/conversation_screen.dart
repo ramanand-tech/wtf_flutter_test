@@ -6,6 +6,7 @@ import '../models/message.dart';
 import '../services/app_services.dart';
 import '../utils/theme.dart';
 import '../rtc/join_call_flow.dart';
+import '../utils/perf_tracker.dart';
 import '../widgets/app_buttons.dart';
 import '../widgets/message_bubble.dart';
 import '../widgets/typing_indicator.dart';
@@ -55,6 +56,19 @@ class _ConversationScreenState extends State<ConversationScreen> {
     final chat = AppServices.instance.chat;
     chat.watchMessages(widget.chatId).listen((msgs) {
       if (!mounted) return;
+      final prevIds = _messages.map((m) => m.id).toSet();
+      for (final m in msgs) {
+        if (!prevIds.contains(m.id) &&
+            m.senderId != widget.currentUserId &&
+            !m.isSystem) {
+          final ms = DateTime.now().difference(m.createdAt).inMilliseconds;
+          PerfTracker.logInstant(
+            'peer_message_ui',
+            ms,
+            budgetMs: PerfBudgets.chatPeerMs,
+          );
+        }
+      }
       setState(() => _messages = msgs);
       _scrollToBottom();
       _markRead();

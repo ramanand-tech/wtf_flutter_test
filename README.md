@@ -58,6 +58,25 @@ wtf_flutter_test/
 | Session logs (Phase 7) | Done — filters, detail sheet, cross-app sync via `/sync/sessions` |
 | UI polish (Phase 8) | Done — 8pt spacing, skeletons, error+retry, motion, CTA hierarchy |
 | Observability (Phase 9) | Done — DevPanel (masked env, tagged logs), AppSnackbar + copy error |
+| Security & perf (Phase 10) | Done — [SECURITY.md](SECURITY.md), perf logs in DevPanel `[PERF]` |
+
+## Security (Phase 10)
+
+- Only **`.env.example`** and **`hms_secrets.example.dart`** are in git — copy locally for real values.
+- See [SECURITY.md](SECURITY.md) and [token_server/README.md](token_server/README.md).
+
+## Performance checks (DevPanel ⋮ → filter `[PERF]`)
+
+| Target | Budget | Log label |
+|--------|--------|-----------|
+| Cold start | ≤ 2.5s | `cold_start` (after home first frame) |
+| Chat peer sync/UI | ≤ 400ms | `peer_message_sync`, `peer_message_ui` |
+| RTC token + room join | ≤ 4s | `rtc_join`, `rtc_room_join` |
+
+1. Cold start: stop app → `flutter run` → open DevPanel after home loads.
+2. Chat: send from Guru → Trainer opens chat — watch `peer_message_*` lines.
+3. Video: Join Call → pre-join → in-room — watch `rtc_join` / `rtc_room_join`.
+4. Chat list smooth scroll: Flutter DevTools → Performance (target 60fps).
 
 ### Chat + schedule test (two apps)
 

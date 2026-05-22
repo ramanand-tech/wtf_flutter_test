@@ -71,4 +71,11 @@
 - **Output:** `dev_panel.dart`, `app_snackbar.dart`, `humanize_error.dart`, `mask_utils.dart`
 - **Used in:** `feat(dx): dev panel and structured logging`
 
+### Prompt #10
+
+- **Tool:** Cursor
+- **Intent:** Phase 10 security checklist + performance instrumentation
+- **Output:** `SECURITY.md`, token_server README, `PerfTracker` + `[PERF]` DevPanel logs
+- **Used in:** `docs(security): env gitignore and perf budgets`
+
 <!-- Add entries as you build: debugging, refactors, etc. -->

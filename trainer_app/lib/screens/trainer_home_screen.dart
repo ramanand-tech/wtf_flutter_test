@@ -1,10 +1,29 @@
 import 'package:flutter/material.dart';
 import 'package:shared/shared.dart';
 import 'package:shared/utils/app_page_route.dart';
+import 'package:shared/utils/perf_tracker.dart';
 import 'package:shared/utils/spacing.dart';
 
-class TrainerHomeScreen extends StatelessWidget {
+class TrainerHomeScreen extends StatefulWidget {
   const TrainerHomeScreen({super.key});
+
+  @override
+  State<TrainerHomeScreen> createState() => _TrainerHomeScreenState();
+}
+
+class _TrainerHomeScreenState extends State<TrainerHomeScreen> {
+  static bool _coldStartReported = false;
+
+  @override
+  void initState() {
+    super.initState();
+    if (!_coldStartReported) {
+      _coldStartReported = true;
+      WidgetsBinding.instance.addPostFrameCallback((_) {
+        PerfTracker.report(PerfMarks.coldStart, budgetMs: PerfBudgets.coldStartMs);
+      });
+    }
+  }
 
   void _openChats(BuildContext context) {
     Navigator.of(context).push(

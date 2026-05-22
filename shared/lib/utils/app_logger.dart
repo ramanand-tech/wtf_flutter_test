@@ -1,6 +1,6 @@
 import 'package:flutter/foundation.dart';
 
-enum LogTag { auth, chat, rtc, schedule }
+enum LogTag { auth, chat, rtc, schedule, perf }
 
 extension LogTagLabel on LogTag {
   /// DevPanel tags: [AUTH], [CHAT], [RTC], [SCHEDULE]

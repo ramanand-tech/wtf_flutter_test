@@ -5,6 +5,7 @@ import '../models/enums.dart';
 import '../services/app_services.dart';
 import '../utils/app_logger.dart';
 import '../utils/app_snackbar.dart';
+import '../utils/perf_tracker.dart';
 import '../utils/theme.dart';
 import 'hms_sdk_holder.dart';
 import 'join_call_args.dart';
@@ -95,6 +96,7 @@ class _MeetingScreenState extends State<MeetingScreen> implements HMSUpdateListe
   @override
   void onJoin({required HMSRoom room}) {
     AppLogger.instance.log(LogTag.rtc, 'Joined room ${room.id}');
+    PerfTracker.report(PerfMarks.rtcRoomJoin, budgetMs: PerfBudgets.rtcJoinMs);
     setState(() {
       _joined = true;
       _startedAt = DateTime.now();

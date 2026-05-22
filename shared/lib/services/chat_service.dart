@@ -3,6 +3,7 @@ import 'dart:async';
 import '../models/enums.dart';
 import '../models/message.dart';
 import '../utils/app_logger.dart';
+import '../utils/perf_tracker.dart';
 import '../utils/seed_data.dart';
 import 'chat_sync_client.dart';
 import 'local_store.dart';
@@ -89,6 +90,7 @@ class SyncChatService implements ChatService {
       if (existing == null) {
         byId[id] = r;
         changed = true;
+        _logPeerSyncLatency(r);
       } else {
         final existingMsg = Message.fromJson(existing);
         final remoteMsg = Message.fromJson(r);
@@ -107,6 +109,19 @@ class SyncChatService implements ChatService {
         return ad.compareTo(bd);
       });
     await _store.setMessages(merged);
+  }
+
+  void _logPeerSyncLatency(Map<String, dynamic> raw) {
+    final createdRaw = raw['createdAt'] as String?;
+    if (createdRaw == null) return;
+    final created = DateTime.tryParse(createdRaw);
+    if (created == null) return;
+    final ms = DateTime.now().difference(created).inMilliseconds;
+    PerfTracker.logInstant(
+      'peer_message_sync',
+      ms,
+      budgetMs: PerfBudgets.chatPeerMs,
+    );
   }
 
   Future<void> _pushLocal() async {

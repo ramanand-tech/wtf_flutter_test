@@ -130,7 +130,8 @@ class _ChatListScreenState extends State<ChatListScreen> {
                       itemCount: summaries.length,
                       itemBuilder: (_, i) {
                         final s = summaries[i];
-                        return ListTile(
+                        return RepaintBoundary(
+                          child: ListTile(
                           leading: CircleAvatar(
                             backgroundImage: s.peerAvatarUrl != null
                                 ? NetworkImage(s.peerAvatarUrl!)
@@ -169,6 +170,7 @@ class _ChatListScreenState extends State<ChatListScreen> {
                             ],
                           ),
                           onTap: () => _openConversation(summary: s),
+                          ),
                         );
                       },
                     )

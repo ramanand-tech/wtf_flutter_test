@@ -4,6 +4,7 @@ import 'package:hmssdk_flutter/hmssdk_flutter.dart';
 
 import '../utils/app_logger.dart';
 import '../utils/app_snackbar.dart';
+import '../utils/perf_tracker.dart';
 import '../utils/theme.dart';
 import '../widgets/app_buttons.dart';
 import 'hms_sdk_holder.dart';
@@ -87,6 +88,7 @@ class _PreJoinScreenState extends State<PreJoinScreen> implements HMSPreviewList
 
   void _joinMeeting() {
     if (_authToken == null) return;
+    PerfTracker.mark(PerfMarks.rtcRoomJoin);
     Navigator.of(context).pushReplacement(
       MaterialPageRoute<void>(
         builder: (_) => MeetingScreen(

@@ -61,6 +61,7 @@ class _DevPanelSheetState extends State<_DevPanelSheet> {
       LogTag.rtc => AppColors.warning,
       LogTag.schedule => AppColors.success,
       LogTag.auth => AppColors.neutral700,
+      LogTag.perf => const Color(0xFF7C3AED),
     };
   }
 

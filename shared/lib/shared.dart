@@ -26,6 +26,7 @@ export 'utils/app_logger.dart';
 export 'utils/app_snackbar.dart';
 export 'utils/humanize_error.dart';
 export 'utils/mask_utils.dart';
+export 'utils/perf_tracker.dart';
 export 'utils/chat_helpers.dart';
 export 'utils/app_page_route.dart';
 export 'utils/extensions.dart';
