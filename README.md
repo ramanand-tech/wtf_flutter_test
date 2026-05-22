@@ -57,6 +57,7 @@ wtf_flutter_test/
 | 100ms video (Phase 6) | Done — requires `token_server/.env` with real 100ms creds |
 | Session logs (Phase 7) | Done — filters, detail sheet, cross-app sync via `/sync/sessions` |
 | UI polish (Phase 8) | Done — 8pt spacing, skeletons, error+retry, motion, CTA hierarchy |
+| Observability (Phase 9) | Done — DevPanel (masked env, tagged logs), AppSnackbar + copy error |
 
 ### Chat + schedule test (two apps)
 

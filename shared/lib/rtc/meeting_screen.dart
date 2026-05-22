@@ -4,6 +4,7 @@ import 'package:hmssdk_flutter/hmssdk_flutter.dart';
 import '../models/enums.dart';
 import '../services/app_services.dart';
 import '../utils/app_logger.dart';
+import '../utils/app_snackbar.dart';
 import '../utils/theme.dart';
 import 'hms_sdk_holder.dart';
 import 'join_call_args.dart';
@@ -73,9 +74,7 @@ class _MeetingScreenState extends State<MeetingScreen> implements HMSUpdateListe
     _sessionLogId = log.id;
     HmsSdkHolder.instance.reset();
     if (!mounted) return;
-    ScaffoldMessenger.of(context).showSnackBar(
-      const SnackBar(content: Text('Session saved to your logs.')),
-    );
+    AppSnackbar.showSuccess(context, 'Session saved to your logs.');
     await _showPostCall();
     if (mounted) Navigator.of(context).popUntil((r) => r.isFirst);
   }
@@ -123,15 +122,8 @@ class _MeetingScreenState extends State<MeetingScreen> implements HMSUpdateListe
   void onHMSError({required HMSException error}) {
     AppLogger.instance.log(LogTag.rtc, 'HMS error: ${error.message}');
     if (!mounted) return;
-    ScaffoldMessenger.of(context).showSnackBar(
-      SnackBar(
-        content: Text(error.message ?? 'Call error'),
-        action: SnackBarAction(
-          label: 'Copy error',
-          onPressed: () {},
-        ),
-      ),
-    );
+    final msg = error.message ?? 'Call error';
+    AppSnackbar.showError(context, msg, copyText: error.toString());
   }
 
   @override

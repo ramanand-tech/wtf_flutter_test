@@ -3,8 +3,8 @@ import 'package:flutter/material.dart';
 import '../services/app_services.dart';
 import '../utils/schedule_utils.dart';
 import '../utils/seed_data.dart';
-import '../utils/theme.dart';
 import '../utils/app_page_route.dart';
+import '../utils/app_snackbar.dart';
 import '../utils/validators.dart';
 import 'my_requests_screen.dart';
 
@@ -66,10 +66,9 @@ class _ScheduleCallScreenState extends State<ScheduleCallScreen> {
         note: _noteController.text.trim(),
       );
       if (!mounted) return;
-      ScaffoldMessenger.of(context).showSnackBar(
-        const SnackBar(
-          content: Text('Call requested. Waiting for trainer approval.'),
-        ),
+      AppSnackbar.showSuccess(
+        context,
+        'Call requested. Waiting for trainer approval.',
       );
       Navigator.of(context).pushReplacement(
         appPageRoute(MyRequestsScreen(primaryColor: widget.primaryColor)),
@@ -82,9 +81,7 @@ class _ScheduleCallScreenState extends State<ScheduleCallScreen> {
   }
 
   void _showError(String msg) {
-    ScaffoldMessenger.of(context).showSnackBar(
-      SnackBar(content: Text(msg), backgroundColor: AppColors.error),
-    );
+    AppSnackbar.showError(context, msg);
   }
 
   @override

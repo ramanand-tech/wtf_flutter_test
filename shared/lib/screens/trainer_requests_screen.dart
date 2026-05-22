@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import '../models/call_request.dart';
 import '../models/enums.dart';
 import '../services/app_services.dart';
+import '../utils/app_snackbar.dart';
 import '../utils/extensions.dart';
 import '../utils/seed_data.dart';
 import '../utils/theme.dart';
@@ -44,10 +45,9 @@ class _TrainerRequestsScreenState extends State<TrainerRequestsScreen> {
     try {
       await AppServices.instance.calls.approve(r.id);
       if (!mounted) return;
-      ScaffoldMessenger.of(context).showSnackBar(
-        SnackBar(
-          content: Text('Call approved for ${r.scheduledFor.toScheduleLabel()}.'),
-        ),
+      AppSnackbar.showSuccess(
+        context,
+        'Call approved for ${r.scheduledFor.toScheduleLabel()}.',
       );
     } on StateError catch (e) {
       _snack(e.message, isError: true);
@@ -86,18 +86,15 @@ class _TrainerRequestsScreenState extends State<TrainerRequestsScreen> {
     if (reason == null || reason.isEmpty) return;
     await AppServices.instance.calls.decline(r.id, reason);
     if (!mounted) return;
-    ScaffoldMessenger.of(context).showSnackBar(
-      SnackBar(content: Text('Call request declined. Reason: $reason')),
-    );
+    AppSnackbar.showInfo(context, 'Call request declined. Reason: $reason');
   }
 
   void _snack(String msg, {bool isError = false}) {
-    ScaffoldMessenger.of(context).showSnackBar(
-      SnackBar(
-        content: Text(msg),
-        backgroundColor: isError ? AppColors.error : null,
-      ),
-    );
+    if (isError) {
+      AppSnackbar.showError(context, msg);
+    } else {
+      AppSnackbar.showInfo(context, msg);
+    }
   }
 
   @override

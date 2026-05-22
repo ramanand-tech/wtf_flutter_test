@@ -6,6 +6,7 @@ import '../models/session_log.dart';
 import '../services/app_services.dart';
 import '../utils/extensions.dart';
 import '../utils/session_log_utils.dart';
+import '../utils/app_snackbar.dart';
 import '../utils/spacing.dart';
 import '../utils/theme.dart';
 import '../widgets/app_buttons.dart';
@@ -117,9 +118,7 @@ class _SessionsListScreenState extends State<SessionsListScreen> {
                       onPressed: () {
                         Clipboard.setData(ClipboardData(text: sessionLogShareText(log)));
                         Navigator.pop(ctx);
-                        ScaffoldMessenger.of(context).showSnackBar(
-                          const SnackBar(content: Text('Summary copied')),
-                        );
+                        AppSnackbar.showInfo(context, 'Summary copied');
                       },
                     ),
                   ),

@@ -1,8 +1,11 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:hmssdk_flutter/hmssdk_flutter.dart';
 
 import '../utils/app_logger.dart';
+import '../utils/app_snackbar.dart';
 import '../utils/theme.dart';
+import '../widgets/app_buttons.dart';
 import 'hms_sdk_holder.dart';
 import 'join_call_args.dart';
 import 'meeting_screen.dart';
@@ -162,7 +165,30 @@ class _PreJoinScreenState extends State<PreJoinScreen> implements HMSPreviewList
                         ? Center(
                             child: Padding(
                               padding: const EdgeInsets.all(16),
-                              child: Text(_error!, textAlign: TextAlign.center),
+                              child: Column(
+                                mainAxisSize: MainAxisSize.min,
+                                children: [
+                                  Text(_error!, textAlign: TextAlign.center),
+                                  const SizedBox(height: 16),
+                                  AppSecondaryButton(
+                                    label: 'Retry',
+                                    onPressed: () {
+                                      setState(() {
+                                        _loading = true;
+                                        _error = null;
+                                      });
+                                      _setup();
+                                    },
+                                  ),
+                                  AppTertiaryButton(
+                                    label: 'Copy error',
+                                    onPressed: () {
+                                      Clipboard.setData(ClipboardData(text: _error!));
+                                      AppSnackbar.showInfo(context, 'Error details copied');
+                                    },
+                                  ),
+                                ],
+                              ),
                             ),
                           )
                         : _previewVideo != null

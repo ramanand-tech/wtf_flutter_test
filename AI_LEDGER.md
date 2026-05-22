@@ -64,4 +64,11 @@
 - **Output:** `AppSpacing`, `loading_skeleton`, `error_state`, `app_buttons`, `appPageRoute`, chat bubble slide
 - **Used in:** `feat(ui): polish spacing, skeletons, motion, error states`
 
+### Prompt #9
+
+- **Tool:** Cursor
+- **Intent:** Phase 9 DX — DevPanel masked env/tags, structured AppLogger, humanized snackbars with copy error
+- **Output:** `dev_panel.dart`, `app_snackbar.dart`, `humanize_error.dart`, `mask_utils.dart`
+- **Used in:** `feat(dx): dev panel and structured logging`
+
 <!-- Add entries as you build: debugging, refactors, etc. -->
