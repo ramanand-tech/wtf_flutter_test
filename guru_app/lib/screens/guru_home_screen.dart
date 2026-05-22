@@ -74,7 +74,17 @@ class GuruHomeScreen extends StatelessWidget {
             title: 'My Sessions',
             subtitle: 'Logs, ratings, notes',
             icon: Icons.history,
-            onTap: () => _placeholder(context, 'Sessions (Phase 7)'),
+            onTap: () {
+              Navigator.of(context).push(
+                MaterialPageRoute<void>(
+                  builder: (_) => const SessionsListScreen(
+                    currentUserId: SeedData.dkId,
+                    isTrainerView: false,
+                    primaryColor: AppColors.guruPrimary,
+                  ),
+                ),
+              );
+            },
           ),
           const SizedBox(height: 8),
           OutlinedButton(
@@ -86,9 +96,4 @@ class GuruHomeScreen extends StatelessWidget {
     );
   }
 
-  void _placeholder(BuildContext context, String feature) {
-    ScaffoldMessenger.of(context).showSnackBar(
-      SnackBar(content: Text('$feature — implement next')),
-    );
-  }
 }

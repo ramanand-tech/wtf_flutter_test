@@ -98,6 +98,34 @@ class ChatSyncClient {
     }
   }
 
+  Future<List<Map<String, dynamic>>> fetchSessions() async {
+    try {
+      final res = await http.get(Uri.parse('$baseUrl/sync/sessions')).timeout(
+        const Duration(seconds: 3),
+      );
+      if (res.statusCode != 200) return [];
+      final list = jsonDecode(res.body) as List<dynamic>;
+      return list.cast<Map<String, dynamic>>();
+    } catch (e) {
+      AppLogger.instance.log(LogTag.rtc, 'Sync sessions fetch failed: $e');
+      return [];
+    }
+  }
+
+  Future<void> pushSessions(List<Map<String, dynamic>> sessions) async {
+    try {
+      await http
+          .post(
+            Uri.parse('$baseUrl/sync/sessions'),
+            headers: {'Content-Type': 'application/json'},
+            body: jsonEncode({'sessionLogs': sessions}),
+          )
+          .timeout(const Duration(seconds: 3));
+    } catch (e) {
+      AppLogger.instance.log(LogTag.rtc, 'Sync sessions push failed: $e');
+    }
+  }
+
   Future<TypingState> fetchTyping() async {
     try {
       final res = await http.get(Uri.parse('$baseUrl/sync/typing')).timeout(

@@ -9,6 +9,8 @@ export 'screens/conversation_screen.dart';
 export 'screens/my_requests_screen.dart';
 export 'screens/schedule_call_screen.dart';
 export 'screens/trainer_requests_screen.dart';
+export 'screens/sessions_list_screen.dart';
+export 'utils/session_log_utils.dart';
 export 'rtc/join_call_flow.dart';
 export 'rtc/prejoin_screen.dart';
 export 'widgets/join_call_button.dart';

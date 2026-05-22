@@ -43,7 +43,17 @@ class TrainerHomeScreen extends StatelessWidget {
               MaterialPageRoute<void>(builder: (_) => const TrainerRequestsScreen()),
             );
           }),
-          _tile(context, 'Sessions', Icons.history, (ctx) => _snack(ctx, 'Phase 7')),
+          _tile(context, 'Sessions', Icons.history, (ctx) {
+            Navigator.of(ctx).push(
+              MaterialPageRoute<void>(
+                builder: (_) => const SessionsListScreen(
+                  currentUserId: SeedData.aaravId,
+                  isTrainerView: true,
+                  primaryColor: AppColors.trainerPrimary,
+                ),
+              ),
+            );
+          }),
         ],
       ),
     );

@@ -20,7 +20,7 @@ class AppServices {
   final AuthService auth;
   final SyncChatService chat;
   final SyncCallService calls;
-  final LogService logs;
+  final SyncLogService logs;
 
   static AppServices? _instance;
 
@@ -39,19 +39,24 @@ class AppServices {
     final store = await LocalStore.init(boxName: hiveBoxName);
     final sync = ChatSyncClient(baseUrl: syncBaseUrl ?? SyncConfig.defaultBaseUrl);
     late final SyncCallService calls;
+    late final SyncLogService logs;
     final chat = SyncChatService(
       store,
       syncClient: sync,
-      onPollTick: () => calls.pullRemote(),
+      onPollTick: () async {
+        await calls.pullRemote();
+        await logs.pullRemote();
+      },
     );
     calls = SyncCallService(store, chat, sync);
+    logs = SyncLogService(store, sync);
     chat.startPolling();
     _instance = AppServices._(
       store: store,
       auth: LocalAuthService(store),
       chat: chat,
       calls: calls,
-      logs: LocalLogService(store),
+      logs: logs,
     );
     return _instance!;
   }

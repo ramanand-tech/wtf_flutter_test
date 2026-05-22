@@ -50,4 +50,11 @@
 - **Output:** `PreJoinScreen`, `MeetingScreen`, `JoinCallFlow`, Android/iOS AV permissions
 - **Used in:** `feat(rtc): 100ms join/prejoin/in-call`
 
+### Prompt #7
+
+- **Tool:** Cursor
+- **Intent:** Phase 7 session logs — list, filters, detail modal, share export, sync
+- **Output:** `SessionsListScreen`, `SyncLogService`, `/sync/sessions`, `session_log_utils_test`
+- **Used in:** `feat(sessions): logs list, filters, post-call rating`
+
 <!-- Add entries as you build: debugging, refactors, etc. -->

@@ -110,6 +110,12 @@ app.post('/sync/typing', (req, res) => {
   res.json({ ok: true });
 });
 
+app.get('/sync/sessions', (_req, res) => res.json(syncStore.sessionLogs));
+app.post('/sync/sessions', (req, res) => {
+  syncStore.sessionLogs = req.body.sessionLogs || [];
+  res.json({ ok: true, count: syncStore.sessionLogs.length });
+});
+
 app.listen(PORT, () => {
   console.log(`Token server http://localhost:${PORT}`);
   console.log(`HMS key: ${mask(APP_ACCESS_KEY)} room: ${mask(DEFAULT_ROOM_ID)}`);

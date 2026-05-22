@@ -1,6 +1,7 @@
 # Environment & secrets
 .env
 token_server/.env
+shared/lib/config/hms_secrets.dart
 
 # Flutter / Dart
 **/.dart_tool/

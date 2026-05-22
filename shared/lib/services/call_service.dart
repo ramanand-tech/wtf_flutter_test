@@ -8,13 +8,13 @@ import '../models/room_meta.dart';
 import '../utils/app_logger.dart';
 import '../utils/extensions.dart';
 import '../utils/seed_data.dart';
+import '../config/hms_secrets.dart';
 import '../utils/validators.dart';
 import 'chat_service.dart';
 import 'chat_sync_client.dart';
 import 'local_store.dart';
 
-/// Default 100ms room id for dev (override via approve hmsRoomId param).
-const String kDefaultHmsRoomId = 'dev_room_wtf_assessment';
+export '../config/hms_secrets.dart' show kDefaultHmsRoomId;
 
 abstract class CallService {
   Stream<List<CallRequest>> watchRequests();

@@ -55,6 +55,7 @@ wtf_flutter_test/
 | Chat (Phase 4) | Done — needs `token_server` running |
 | Scheduler (Phase 5) | Done — request / approve / decline + sync |
 | 100ms video (Phase 6) | Done — requires `token_server/.env` with real 100ms creds |
+| Session logs (Phase 7) | Done — filters, detail sheet, cross-app sync via `/sync/sessions` |
 
 ### Chat + schedule test (two apps)
 
@@ -65,14 +66,17 @@ wtf_flutter_test/
 5. Trainer → Requests → Approve → Guru → My Requests / Chat system message
 6. **Decline test:** new request → Trainer Decline with reason → DK sees declined copy
 7. **Video:** After approve, both tap **Join Call** (debug: join window relaxed) → pre-join → in-call → end → rating/notes
+8. **Sessions:** Guru → My Sessions / Trainer → Sessions — filter chips, tap row for notes; pull-to-refresh syncs logs
 
 ### 100ms setup (required for video)
 
 1. Create app at https://dashboard.100ms.live
-2. Copy credentials to `token_server/.env` (see `.env.example`)
-3. Template roles must include `member` and `trainer` (lowercase)
-4. `HMS_ROOM_ID` = room id from dashboard (same room for both apps)
+2. Copy `token_server/.env` from `.env.example` (real keys + room id — **not committed**)
+3. Copy `shared/lib/config/hms_secrets.example.dart` → `hms_secrets.dart` (same room id for Flutter approve flow)
+4. Template roles must include `member` and `trainer` (lowercase)
 5. `npm start` in `token_server/` before joining calls
+
+Never put real keys or room ids in `.env.example` — that file is pushed to Git.
 
 ## Demo video
 
