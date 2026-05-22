@@ -7,6 +7,7 @@ import '../utils/extensions.dart';
 import '../utils/seed_data.dart';
 import '../utils/theme.dart';
 import '../widgets/empty_state.dart';
+import '../widgets/join_call_button.dart';
 import '../widgets/request_status_chip.dart';
 
 class MyRequestsScreen extends StatefulWidget {
@@ -73,16 +74,30 @@ class _MyRequestsScreenState extends State<MyRequestsScreen> {
                       style: Theme.of(context).textTheme.titleMedium,
                     ),
                     const SizedBox(height: 8),
-                    ...upcoming.map((r) => Card(
-                          child: ListTile(
-                            leading: const Icon(Icons.videocam, color: AppColors.guruPrimary),
-                            title: Text(r.scheduledFor.toScheduleLabel()),
-                            subtitle: Text(r.note),
-                            trailing: AppServices.instance.calls.canJoin(r)
-                                ? const Badge(label: Text('Join soon'))
-                                : null,
+                    ...upcoming.map(
+                      (r) => Card(
+                        child: Padding(
+                          padding: const EdgeInsets.all(12),
+                          child: Column(
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            children: [
+                              ListTile(
+                                contentPadding: EdgeInsets.zero,
+                                leading: const Icon(Icons.videocam, color: AppColors.guruPrimary),
+                                title: Text(r.scheduledFor.toScheduleLabel()),
+                                subtitle: Text(r.note),
+                              ),
+                              JoinCallButton(
+                                request: r,
+                                currentUserId: SeedData.dkId,
+                                currentRole: UserRole.member,
+                                primaryColor: widget.primaryColor,
+                              ),
+                            ],
                           ),
-                        )),
+                        ),
+                      ),
+                    ),
                     const SizedBox(height: 16),
                   ],
                   Text('All requests', style: Theme.of(context).textTheme.titleMedium),

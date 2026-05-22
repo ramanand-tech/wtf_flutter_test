@@ -27,9 +27,14 @@ npm start
 - iOS simulator: `http://localhost:3000`
 - Physical device: use your machine LAN IP, e.g. `http://192.168.1.x:3000`
 
+## 100ms template roles
+
+Your 100ms template must define roles named **`member`** and **`trainer`** (matching app JWT). Use a single room id in `HMS_ROOM_ID` for local dev.
+
 ## Test
 
 ```bash
 curl "http://localhost:3000/health"
-curl "http://localhost:3000/token?userId=dk&role=member&roomId=YOUR_ROOM_ID"
+curl "http://localhost:3000/token?userId=member_dk&role=member&roomId=YOUR_ROOM_ID"
+curl "http://localhost:3000/token?userId=trainer_aarav&role=trainer&roomId=YOUR_ROOM_ID"
 ```

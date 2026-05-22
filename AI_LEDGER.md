@@ -43,4 +43,11 @@
 - **Output:** `schedule_call_screen`, `trainer_requests_screen`, `my_requests_screen`, call sync on token_server
 - **Used in:** `feat(schedule): request, approve, decline with conflict check`
 
-<!-- Add entries as you build: debugging, refactors, 100ms setup, etc. -->
+### Prompt #6
+
+- **Tool:** Cursor
+- **Intent:** Phase 6 — hmssdk pre-join preview, meeting UI, token fetch, post-call sheets
+- **Output:** `PreJoinScreen`, `MeetingScreen`, `JoinCallFlow`, Android/iOS AV permissions
+- **Used in:** `feat(rtc): 100ms join/prejoin/in-call`
+
+<!-- Add entries as you build: debugging, refactors, etc. -->

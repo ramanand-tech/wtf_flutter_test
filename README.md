@@ -54,7 +54,7 @@ wtf_flutter_test/
 | Trainer login + home | Done |
 | Chat (Phase 4) | Done — needs `token_server` running |
 | Scheduler (Phase 5) | Done — request / approve / decline + sync |
-| 100ms video (Phase 6) | Next — see `../IMPLEMENTATION_STEPS.md` |
+| 100ms video (Phase 6) | Done — requires `token_server/.env` with real 100ms creds |
 
 ### Chat + schedule test (two apps)
 
@@ -64,6 +64,15 @@ wtf_flutter_test/
 4. **Schedule:** Guru → Schedule Call → pick Today + slot + note `Macros review` → Request
 5. Trainer → Requests → Approve → Guru → My Requests / Chat system message
 6. **Decline test:** new request → Trainer Decline with reason → DK sees declined copy
+7. **Video:** After approve, both tap **Join Call** (debug: join window relaxed) → pre-join → in-call → end → rating/notes
+
+### 100ms setup (required for video)
+
+1. Create app at https://dashboard.100ms.live
+2. Copy credentials to `token_server/.env` (see `.env.example`)
+3. Template roles must include `member` and `trainer` (lowercase)
+4. `HMS_ROOM_ID` = room id from dashboard (same room for both apps)
+5. `npm start` in `token_server/` before joining calls
 
 ## Demo video
 

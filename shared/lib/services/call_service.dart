@@ -1,5 +1,7 @@
 import 'dart:async';
 
+import 'package:flutter/foundation.dart';
+
 import '../models/call_request.dart';
 import '../models/enums.dart';
 import '../models/room_meta.dart';
@@ -28,6 +30,8 @@ abstract class CallService {
   bool canJoin(CallRequest request);
   Future<void> pullRemote();
   List<CallRequest> upcomingForMember(String memberId);
+  List<CallRequest> upcomingForTrainer(String trainerId);
+  RoomMeta? roomMetaFor(String callRequestId);
 }
 
 class SyncCallService implements CallService {
@@ -102,6 +106,28 @@ class SyncCallService implements CallService {
         .where((r) => r.status == CallRequestStatus.approved)
         .map((r) => r.scheduledFor)
         .toList();
+  }
+
+  @override
+  RoomMeta? roomMetaFor(String callRequestId) {
+    for (final raw in _store.roomMeta) {
+      final meta = RoomMeta.fromJson(raw);
+      if (meta.callRequestId == callRequestId) return meta;
+    }
+    return null;
+  }
+
+  @override
+  List<CallRequest> upcomingForTrainer(String trainerId) {
+    return _all()
+        .where(
+          (r) =>
+              r.trainerId == trainerId &&
+              r.status == CallRequestStatus.approved &&
+              r.scheduledFor.isAfter(DateTime.now().subtract(const Duration(hours: 1))),
+        )
+        .toList()
+      ..sort((a, b) => a.scheduledFor.compareTo(b.scheduledFor));
   }
 
   @override
@@ -213,6 +239,10 @@ class SyncCallService implements CallService {
   bool canJoin(CallRequest request) {
     if (request.status != CallRequestStatus.approved) return false;
     final diff = request.scheduledFor.difference(DateTime.now());
+    if (kDebugMode) {
+      // Easier manual testing: any approved call within ~48h window
+      return diff.inHours <= 48 && diff.inHours >= -2;
+    }
     return diff.inMinutes <= 10 && diff.inMinutes >= -60;
   }
 }

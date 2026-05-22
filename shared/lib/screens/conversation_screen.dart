@@ -1,9 +1,11 @@
 import 'package:flutter/material.dart';
 
+import '../models/call_request.dart';
 import '../models/enums.dart';
 import '../models/message.dart';
 import '../services/app_services.dart';
 import '../utils/theme.dart';
+import '../rtc/join_call_flow.dart';
 import '../widgets/message_bubble.dart';
 import '../widgets/typing_indicator.dart';
 
@@ -104,23 +106,48 @@ class _ConversationScreenState extends State<ConversationScreen> {
     super.dispose();
   }
 
+  CallRequest? _joinableCall() {
+    final calls = AppServices.instance.calls.upcomingForMember(widget.currentUserId);
+    if (widget.currentRole == UserRole.trainer) {
+      final trainerCalls = AppServices.instance.calls.upcomingForTrainer(widget.currentUserId);
+      if (trainerCalls.isEmpty) return null;
+      return trainerCalls.firstWhere(
+        (r) => AppServices.instance.calls.canJoin(r),
+        orElse: () => trainerCalls.first,
+      );
+    }
+    for (final r in calls) {
+      if (AppServices.instance.calls.canJoin(r)) return r;
+    }
+    return null;
+  }
+
   @override
   Widget build(BuildContext context) {
+    final joinCall = _joinableCall();
+    final showJoinBadge = joinCall != null && AppServices.instance.calls.canJoin(joinCall);
+
     return Scaffold(
       appBar: AppBar(
         title: Text(widget.peerName),
         actions: [
           IconButton(
             icon: Badge(
+              isLabelVisible: showJoinBadge,
               label: const Text(' '),
               smallSize: 8,
               child: const Icon(Icons.videocam_outlined),
             ),
-            onPressed: () {
-              ScaffoldMessenger.of(context).showSnackBar(
-                const SnackBar(content: Text('Video call — Phase 6')),
-              );
-            },
+            onPressed: joinCall == null
+                ? null
+                : () => JoinCallFlow.open(
+                      context: context,
+                      request: joinCall,
+                      currentUserId: widget.currentUserId,
+                      currentRole: widget.currentRole,
+                      userName: JoinCallFlow.displayName(widget.currentRole),
+                      primaryColor: widget.primaryColor,
+                    ),
           ),
         ],
       ),

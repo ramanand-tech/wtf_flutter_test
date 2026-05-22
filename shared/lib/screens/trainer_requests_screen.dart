@@ -7,6 +7,7 @@ import '../utils/extensions.dart';
 import '../utils/seed_data.dart';
 import '../utils/theme.dart';
 import '../widgets/empty_state.dart';
+import '../widgets/join_call_button.dart';
 import '../widgets/request_status_chip.dart';
 
 class TrainerRequestsScreen extends StatefulWidget {
@@ -97,7 +98,14 @@ class _TrainerRequestsScreenState extends State<TrainerRequestsScreen> {
   @override
   Widget build(BuildContext context) {
     final pending = _requests.where((r) => r.status == CallRequestStatus.pending).toList();
-    final others = _requests.where((r) => r.status != CallRequestStatus.pending).toList();
+    final upcoming = AppServices.instance.calls.upcomingForTrainer(SeedData.aaravId);
+    final upcomingIds = upcoming.map((r) => r.id).toSet();
+    final others = _requests
+        .where(
+          (r) =>
+              r.status != CallRequestStatus.pending && !upcomingIds.contains(r.id),
+        )
+        .toList();
 
     return Scaffold(
       appBar: AppBar(title: const Text('Call Requests')),
@@ -125,6 +133,31 @@ class _TrainerRequestsScreenState extends State<TrainerRequestsScreen> {
                     Text('Pending', style: Theme.of(context).textTheme.titleMedium),
                     const SizedBox(height: 8),
                     ...pending.map((r) => _pendingCard(r)),
+                  ],
+                  if (upcoming.isNotEmpty) ...[
+                    const SizedBox(height: 16),
+                    Text('Upcoming Calls', style: Theme.of(context).textTheme.titleMedium),
+                    const SizedBox(height: 8),
+                    ...upcoming.map(
+                      (r) => Card(
+                        child: Padding(
+                          padding: const EdgeInsets.all(12),
+                          child: Column(
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            children: [
+                              Text('DK — ${r.scheduledFor.toScheduleLabel()}'),
+                              const SizedBox(height: 8),
+                              JoinCallButton(
+                                request: r,
+                                currentUserId: SeedData.aaravId,
+                                currentRole: UserRole.trainer,
+                                primaryColor: AppColors.trainerPrimary,
+                              ),
+                            ],
+                          ),
+                        ),
+                      ),
+                    ),
                   ],
                   if (others.isNotEmpty) ...[
                     const SizedBox(height: 16),

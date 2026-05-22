@@ -11,6 +11,8 @@ dependencies:
   flutter:
     sdk: flutter
   http: ^1.4.0
+  hmssdk_flutter: ^1.11.1
+  permission_handler: ^11.4.0
   hive: ^2.2.3
   hive_flutter: ^1.1.0
   path_provider: ^2.1.5
