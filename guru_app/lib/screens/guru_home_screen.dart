@@ -1,7 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:shared/shared.dart';
-import 'package:shared/utils/app_page_route.dart';
-import 'package:shared/utils/spacing.dart';
 
 class GuruHomeScreen extends StatelessWidget {
   const GuruHomeScreen({super.key});

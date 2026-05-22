@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:shared/shared.dart';
-import 'package:shared/utils/perf_tracker.dart';
 
 import 'app.dart';
 

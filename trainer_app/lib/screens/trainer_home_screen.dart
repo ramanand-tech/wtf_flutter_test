@@ -1,8 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:shared/shared.dart';
-import 'package:shared/utils/app_page_route.dart';
-import 'package:shared/utils/perf_tracker.dart';
-import 'package:shared/utils/spacing.dart';
 
 class TrainerHomeScreen extends StatefulWidget {
   const TrainerHomeScreen({super.key});

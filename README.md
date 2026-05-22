@@ -59,6 +59,8 @@ wtf_flutter_test/
 | UI polish (Phase 8) | Done — 8pt spacing, skeletons, error+retry, motion, CTA hierarchy |
 | Observability (Phase 9) | Done — DevPanel (masked env, tagged logs), AppSnackbar + copy error |
 | Security & perf (Phase 10) | Done — [SECURITY.md](SECURITY.md), perf logs in DevPanel `[PERF]` |
+| Tests & QA (Phase 11) | Done — see [TESTING.md](TESTING.md), `./scripts/run_tests.sh` |
+| AI ledger (Phase 12) | Done — [AI_LEDGER.md](AI_LEDGER.md) (14 entries, coding/debug/refactor) |
 
 ## Security (Phase 10)
 
@@ -99,9 +101,21 @@ wtf_flutter_test/
 
 Never put real keys or room ids in `.env.example` — that file is pushed to Git.
 
+## AI usage (Phase 12)
+
+All implementation phases used **Cursor** with structured prompts. See [AI_LEDGER.md](AI_LEDGER.md) for intents, outputs, commit SHAs, and debugging/refactor notes.
+
+## Tests (Phase 11)
+
+```bash
+./scripts/run_tests.sh
+```
+
+Covers `shared`, `guru_app`, and `trainer_app` tests plus `flutter analyze`. Manual 9-step script: [TESTING.md](TESTING.md).
+
 ## Demo video
 
-_Add YouTube/Drive link before submission._
+_Add YouTube/Drive link before submission — follow the 9 steps in [TESTING.md](TESTING.md)._
 
 ## Assessment doc
 

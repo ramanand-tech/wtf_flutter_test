@@ -1,7 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:shared/shared.dart';
-import 'package:shared/utils/perf_tracker.dart';
-import 'package:shared/widgets/loading_skeleton.dart';
 
 import 'guru_home_screen.dart';
 import 'guru_onboarding_screen.dart';
