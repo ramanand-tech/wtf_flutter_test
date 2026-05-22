@@ -36,4 +36,11 @@
 - **Output:** `ChatSyncClient`, Android cleartext + INTERNET
 - **Used in:** guru_app + trainer_app chat flow
 
+### Prompt #5
+
+- **Tool:** Cursor
+- **Intent:** Phase 5 schedule — 3-day calendar, 30-min slots, SyncCallService, trainer approve/decline
+- **Output:** `schedule_call_screen`, `trainer_requests_screen`, `my_requests_screen`, call sync on token_server
+- **Used in:** `feat(schedule): request, approve, decline with conflict check`
+
 <!-- Add entries as you build: debugging, refactors, 100ms setup, etc. -->

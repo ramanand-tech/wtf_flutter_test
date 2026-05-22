@@ -59,7 +59,15 @@ class GuruHomeScreen extends StatelessWidget {
             title: 'Schedule Call',
             subtitle: 'Pick a slot — 100ms video',
             icon: Icons.calendar_month,
-            onTap: () => _placeholder(context, 'Scheduler (Phase 5)'),
+            onTap: () {
+              Navigator.of(context).push(
+                MaterialPageRoute<void>(
+                  builder: (_) => const ScheduleCallScreen(
+                    primaryColor: AppColors.guruPrimary,
+                  ),
+                ),
+              );
+            },
           ),
           const SizedBox(height: 8),
           HomeCard(

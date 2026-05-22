@@ -70,6 +70,34 @@ class ChatSyncClient {
     } catch (_) {}
   }
 
+  Future<List<Map<String, dynamic>>> fetchCalls() async {
+    try {
+      final res = await http.get(Uri.parse('$baseUrl/sync/calls')).timeout(
+        const Duration(seconds: 3),
+      );
+      if (res.statusCode != 200) return [];
+      final list = jsonDecode(res.body) as List<dynamic>;
+      return list.cast<Map<String, dynamic>>();
+    } catch (e) {
+      AppLogger.instance.log(LogTag.schedule, 'Sync calls fetch failed: $e');
+      return [];
+    }
+  }
+
+  Future<void> pushCalls(List<Map<String, dynamic>> calls) async {
+    try {
+      await http
+          .post(
+            Uri.parse('$baseUrl/sync/calls'),
+            headers: {'Content-Type': 'application/json'},
+            body: jsonEncode({'callRequests': calls}),
+          )
+          .timeout(const Duration(seconds: 3));
+    } catch (e) {
+      AppLogger.instance.log(LogTag.schedule, 'Sync calls push failed: $e');
+    }
+  }
+
   Future<TypingState> fetchTyping() async {
     try {
       final res = await http.get(Uri.parse('$baseUrl/sync/typing')).timeout(

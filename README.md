@@ -53,14 +53,17 @@ wtf_flutter_test/
 | Guru onboarding + home | Done |
 | Trainer login + home | Done |
 | Chat (Phase 4) | Done — needs `token_server` running |
-| Scheduler / 100ms UI | Next — see `../IMPLEMENTATION_STEPS.md` |
+| Scheduler (Phase 5) | Done — request / approve / decline + sync |
+| 100ms video (Phase 6) | Next — see `../IMPLEMENTATION_STEPS.md` |
 
-### Chat test (two apps)
+### Chat + schedule test (two apps)
 
 1. `cd token_server && npm start`
 2. Run guru_app + trainer_app on emulators
-3. Guru → Chat → send `Hi Coach 👋`
-4. Trainer → Chats → see unread → reply
+3. **Chat:** Guru → Chat → `Hi Coach 👋` → Trainer → Chats → reply
+4. **Schedule:** Guru → Schedule Call → pick Today + slot + note `Macros review` → Request
+5. Trainer → Requests → Approve → Guru → My Requests / Chat system message
+6. **Decline test:** new request → Trainer Decline with reason → DK sees declined copy
 
 ## Demo video
 

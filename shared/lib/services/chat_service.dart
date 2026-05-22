@@ -24,11 +24,16 @@ abstract class ChatService {
 }
 
 class SyncChatService implements ChatService {
-  SyncChatService(this._store, {required ChatSyncClient syncClient})
-      : _sync = syncClient;
+  SyncChatService(
+    this._store, {
+    required ChatSyncClient syncClient,
+    Future<void> Function()? onPollTick,
+  })  : _sync = syncClient,
+        _onPollTick = onPollTick;
 
   final LocalStore _store;
   final ChatSyncClient _sync;
+  final Future<void> Function()? _onPollTick;
   final _typingController = StreamController<bool>.broadcast();
   Timer? _pollTimer;
   TypingState? _remoteTyping;
@@ -70,6 +75,7 @@ class SyncChatService implements ChatService {
     _remoteTyping = await _sync.fetchTyping();
     final active = _remoteTyping!.isActive && _remoteTyping!.userId.isNotEmpty;
     _typingController.add(active);
+    await _onPollTick?.call();
   }
 
   Future<void> _mergeMessages(List<Map<String, dynamic>> remote) async {

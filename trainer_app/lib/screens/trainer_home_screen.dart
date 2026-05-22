@@ -38,7 +38,11 @@ class TrainerHomeScreen extends StatelessWidget {
         children: [
           _tile(context, 'Members', Icons.people, (ctx) => _snack(ctx, 'CRM list (Phase 3+)')),
           _tile(context, 'Chats', Icons.chat, _openChats),
-          _tile(context, 'Requests', Icons.pending_actions, (ctx) => _snack(ctx, 'Phase 5')),
+          _tile(context, 'Requests', Icons.pending_actions, (ctx) {
+            Navigator.of(ctx).push(
+              MaterialPageRoute<void>(builder: (_) => const TrainerRequestsScreen()),
+            );
+          }),
           _tile(context, 'Sessions', Icons.history, (ctx) => _snack(ctx, 'Phase 7')),
         ],
       ),
