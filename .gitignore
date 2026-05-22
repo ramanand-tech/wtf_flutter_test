@@ -1,0 +1,26 @@
+# Environment & secrets
+.env
+token_server/.env
+
+# Flutter / Dart
+**/.dart_tool/
+**/.packages
+**/build/
+**/.flutter-plugins
+**/.flutter-plugins-dependencies
+
+# IDE
+.idea/
+.vscode/
+*.iml
+
+# OS
+.DS_Store
+Thumbs.db
+
+# Node
+token_server/node_modules/
+
+# Hive (local dev)
+*.hive
+*.lock

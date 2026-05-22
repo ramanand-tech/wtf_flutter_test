@@ -1,0 +1,39 @@
+# AI Ledger
+
+> Maintain during the assessment. Minimum 10 meaningful entries before submission.
+
+---
+
+### Prompt #1
+
+- **Tool:** Cursor (Claude)
+- **Intent:** Scaffold monorepo per WTF assessment doc — `shared`, `guru_app`, `trainer_app`, `token_server`, models, ADRs
+- **Output:** Full folder structure, Hive services, seed DK/Aarav, Riverpod apps, Node token endpoint
+- **Used in:** Initial scaffold commit — `wtf_flutter_test/`
+
+---
+
+### Prompt #2
+
+- **Tool:** Cursor
+- **Intent:** Step-by-step implementation guide from Google Doc export
+- **Output:** `IMPLEMENTATION_STEPS.md` (parent folder)
+- **Used in:** Planning only
+
+---
+
+### Prompt #3
+
+- **Tool:** Cursor
+- **Intent:** Phase 4 chat — SyncChatService, token_server sync, bubbles, typing, read receipts
+- **Output:** `SyncChatService`, `ChatListScreen`, `ConversationScreen`, `/sync/typing`
+- **Used in:** `feat(chat): list, conversation, typing, read receipts`
+
+### Prompt #4
+
+- **Tool:** Cursor
+- **Intent:** Cross-app message merge + poll every 800ms via `http://10.0.2.2:3000`
+- **Output:** `ChatSyncClient`, Android cleartext + INTERNET
+- **Used in:** guru_app + trainer_app chat flow
+
+<!-- Add entries as you build: debugging, refactors, 100ms setup, etc. -->

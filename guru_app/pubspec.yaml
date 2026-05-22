@@ -1,0 +1,27 @@
+name: guru_app
+description: Guru (Member) app — DK persona for WTF Flutter assessment.
+publish_to: none
+version: 1.0.0+1
+
+environment:
+  sdk: ^3.11.1
+
+dependencies:
+  flutter:
+    sdk: flutter
+  cupertino_icons: ^1.0.8
+  shared:
+    path: ../shared
+  flutter_riverpod: ^2.6.1
+  hive_flutter: ^1.1.0
+  hmssdk_flutter: ^1.11.1
+  permission_handler: ^11.4.0
+  http: ^1.4.0
+
+dev_dependencies:
+  flutter_test:
+    sdk: flutter
+  flutter_lints: ^6.0.0
+
+flutter:
+  uses-material-design: true
