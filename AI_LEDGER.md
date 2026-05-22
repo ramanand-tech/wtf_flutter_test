@@ -173,6 +173,15 @@
 
 ---
 
+### Prompt #19 — Phase 13 submission docs
+
+- **Tool:** Cursor
+- **Intent:** Final README (prerequisites, run server/apps, demo video), submission checklist, email template
+- **Output:** `README.md` rewrite, `SUBMISSION.md`, `scripts/setup_local.sh`
+- **Used in:** `docs: submission README and reviewer checklist` — *AI-assisted via Cursor*
+
+---
+
 ## Commit index (AI-assisted)
 
 | SHA | Message | AI note |
