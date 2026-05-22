@@ -6,6 +6,7 @@ import '../models/message.dart';
 import '../services/app_services.dart';
 import '../utils/theme.dart';
 import '../rtc/join_call_flow.dart';
+import '../widgets/app_buttons.dart';
 import '../widgets/message_bubble.dart';
 import '../widgets/typing_indicator.dart';
 
@@ -36,6 +37,7 @@ class _ConversationScreenState extends State<ConversationScreen> {
   final _scrollController = ScrollController();
   List<Message> _messages = [];
   bool _peerTyping = false;
+  bool _syncError = false;
   static const _quickReplies = [
     'Got it 👍',
     'Can we talk at 6?',
@@ -97,6 +99,8 @@ class _ConversationScreenState extends State<ConversationScreen> {
 
   Future<void> _onRefresh() async {
     await AppServices.instance.chat.pullRemote();
+    if (!mounted) return;
+    setState(() => _syncError = !AppServices.instance.syncClient.lastMessagesOk);
   }
 
   @override
@@ -153,6 +157,17 @@ class _ConversationScreenState extends State<ConversationScreen> {
       ),
       body: Column(
         children: [
+          if (_syncError)
+            MaterialBanner(
+              content: const Text('Sync offline — pull to refresh or retry'),
+              leading: const Icon(Icons.wifi_off),
+              actions: [
+                AppTertiaryButton(
+                  label: 'Retry',
+                  onPressed: _onRefresh,
+                ),
+              ],
+            ),
           Expanded(
             child: RefreshIndicator(
               onRefresh: _onRefresh,
@@ -172,10 +187,11 @@ class _ConversationScreenState extends State<ConversationScreen> {
                     tween: Tween(begin: 0, end: 1),
                     duration: const Duration(milliseconds: 200),
                     builder: (context, value, child) {
+                      final slideX = isMine ? (1 - value) * 20.0 : (value - 1) * 20.0;
                       return Opacity(
                         opacity: value,
                         child: Transform.translate(
-                          offset: Offset(0, (1 - value) * 12),
+                          offset: Offset(slideX, (1 - value) * 6),
                           child: child,
                         ),
                       );

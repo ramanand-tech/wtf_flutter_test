@@ -29,16 +29,24 @@ class ChatSyncClient {
   ChatSyncClient({required this.baseUrl});
 
   final String baseUrl;
+  bool lastMessagesOk = true;
+  bool lastCallsOk = true;
+  bool lastSessionsOk = true;
 
   Future<List<Map<String, dynamic>>> fetchMessages() async {
     try {
       final res = await http.get(Uri.parse('$baseUrl/sync/messages')).timeout(
         const Duration(seconds: 3),
       );
-      if (res.statusCode != 200) return [];
+      if (res.statusCode != 200) {
+        lastMessagesOk = false;
+        return [];
+      }
+      lastMessagesOk = true;
       final list = jsonDecode(res.body) as List<dynamic>;
       return list.cast<Map<String, dynamic>>();
     } catch (e) {
+      lastMessagesOk = false;
       AppLogger.instance.log(LogTag.chat, 'Sync fetch failed: $e');
       return [];
     }
@@ -75,10 +83,15 @@ class ChatSyncClient {
       final res = await http.get(Uri.parse('$baseUrl/sync/calls')).timeout(
         const Duration(seconds: 3),
       );
-      if (res.statusCode != 200) return [];
+      if (res.statusCode != 200) {
+        lastCallsOk = false;
+        return [];
+      }
+      lastCallsOk = true;
       final list = jsonDecode(res.body) as List<dynamic>;
       return list.cast<Map<String, dynamic>>();
     } catch (e) {
+      lastCallsOk = false;
       AppLogger.instance.log(LogTag.schedule, 'Sync calls fetch failed: $e');
       return [];
     }
@@ -103,10 +116,15 @@ class ChatSyncClient {
       final res = await http.get(Uri.parse('$baseUrl/sync/sessions')).timeout(
         const Duration(seconds: 3),
       );
-      if (res.statusCode != 200) return [];
+      if (res.statusCode != 200) {
+        lastSessionsOk = false;
+        return [];
+      }
+      lastSessionsOk = true;
       final list = jsonDecode(res.body) as List<dynamic>;
       return list.cast<Map<String, dynamic>>();
     } catch (e) {
+      lastSessionsOk = false;
       AppLogger.instance.log(LogTag.rtc, 'Sync sessions fetch failed: $e');
       return [];
     }

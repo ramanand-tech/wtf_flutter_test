@@ -1,13 +1,15 @@
 import 'package:flutter/material.dart';
 import 'package:shared/shared.dart';
+import 'package:shared/utils/app_page_route.dart';
+import 'package:shared/utils/spacing.dart';
 
 class TrainerHomeScreen extends StatelessWidget {
   const TrainerHomeScreen({super.key});
 
   void _openChats(BuildContext context) {
     Navigator.of(context).push(
-      MaterialPageRoute<void>(
-        builder: (_) => const ChatListScreen(
+      appPageRoute(
+        const ChatListScreen(
           currentUserId: SeedData.aaravId,
           currentRole: UserRole.trainer,
           primaryColor: AppColors.trainerPrimary,
@@ -32,21 +34,19 @@ class TrainerHomeScreen extends StatelessWidget {
       floatingActionButton: const DevPanelFab(buildInfo: 'trainer_app v1.0.0'),
       body: GridView.count(
         crossAxisCount: 2,
-        padding: const EdgeInsets.all(16),
+        padding: const EdgeInsets.all(AppSpacing.sm),
         mainAxisSpacing: 8,
         crossAxisSpacing: 8,
         children: [
           _tile(context, 'Members', Icons.people, (ctx) => _snack(ctx, 'CRM list (Phase 3+)')),
           _tile(context, 'Chats', Icons.chat, _openChats),
           _tile(context, 'Requests', Icons.pending_actions, (ctx) {
-            Navigator.of(ctx).push(
-              MaterialPageRoute<void>(builder: (_) => const TrainerRequestsScreen()),
-            );
+            Navigator.of(ctx).push(appPageRoute(const TrainerRequestsScreen()));
           }),
           _tile(context, 'Sessions', Icons.history, (ctx) {
             Navigator.of(ctx).push(
-              MaterialPageRoute<void>(
-                builder: (_) => const SessionsListScreen(
+              appPageRoute(
+                const SessionsListScreen(
                   currentUserId: SeedData.aaravId,
                   isTrainerView: true,
                   primaryColor: AppColors.trainerPrimary,

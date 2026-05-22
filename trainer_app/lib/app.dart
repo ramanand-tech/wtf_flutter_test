@@ -36,7 +36,7 @@ class _TrainerAppState extends ConsumerState<TrainerApp> {
       title: 'Trainer App — Aarav',
       theme: buildAppTheme(primary: AppColors.trainerPrimary, appName: 'Trainer'),
       home: _loading
-          ? const Scaffold(body: Center(child: CircularProgressIndicator()))
+          ? const Scaffold(body: CardListSkeleton())
           : _loggedIn
               ? const TrainerHomeScreen()
               : TrainerLoginScreen(onLoggedIn: () => setState(() => _loggedIn = true)),

@@ -38,8 +38,17 @@ ThemeData buildAppTheme({required Color primary, required String appName}) {
     textTheme: const TextTheme(
       headlineLarge: TextStyle(fontSize: 24, fontWeight: FontWeight.w600),
       headlineMedium: TextStyle(fontSize: 20, fontWeight: FontWeight.w600),
+      titleMedium: TextStyle(fontSize: 16, fontWeight: FontWeight.w600),
       bodyLarge: TextStyle(fontSize: 16, fontWeight: FontWeight.w400),
       bodyMedium: TextStyle(fontSize: 14, fontWeight: FontWeight.w400),
+      bodySmall: TextStyle(fontSize: 12, fontWeight: FontWeight.w400),
+      labelLarge: TextStyle(fontSize: 14, fontWeight: FontWeight.w600),
+    ),
+    textButtonTheme: TextButtonThemeData(
+      style: TextButton.styleFrom(
+        foregroundColor: primary,
+        padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 10),
+      ),
     ),
     cardTheme: CardThemeData(
       elevation: 0,

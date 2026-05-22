@@ -14,6 +14,7 @@ class AppServices {
     required this.chat,
     required this.calls,
     required this.logs,
+    required this.syncClient,
   });
 
   final LocalStore store;
@@ -21,6 +22,7 @@ class AppServices {
   final SyncChatService chat;
   final SyncCallService calls;
   final SyncLogService logs;
+  final ChatSyncClient syncClient;
 
   static AppServices? _instance;
 
@@ -57,6 +59,7 @@ class AppServices {
       chat: chat,
       calls: calls,
       logs: logs,
+      syncClient: sync,
     );
     return _instance!;
   }

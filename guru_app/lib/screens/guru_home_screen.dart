@@ -1,13 +1,15 @@
 import 'package:flutter/material.dart';
 import 'package:shared/shared.dart';
+import 'package:shared/utils/app_page_route.dart';
+import 'package:shared/utils/spacing.dart';
 
 class GuruHomeScreen extends StatelessWidget {
   const GuruHomeScreen({super.key});
 
   void _openChat(BuildContext context) {
     Navigator.of(context).push(
-      MaterialPageRoute<void>(
-        builder: (_) => const ChatListScreen(
+      appPageRoute(
+        const ChatListScreen(
           currentUserId: SeedData.dkId,
           currentRole: UserRole.member,
           primaryColor: AppColors.guruPrimary,
@@ -19,8 +21,8 @@ class GuruHomeScreen extends StatelessWidget {
 
   void _openChatDirect(BuildContext context) {
     Navigator.of(context).push(
-      MaterialPageRoute<void>(
-        builder: (_) => const ConversationScreen(
+      appPageRoute(
+        const ConversationScreen(
           currentUserId: SeedData.dkId,
           currentRole: UserRole.member,
           peerId: SeedData.aaravId,
@@ -46,7 +48,7 @@ class GuruHomeScreen extends StatelessWidget {
       ),
       floatingActionButton: const DevPanelFab(buildInfo: 'guru_app v1.0.0'),
       body: ListView(
-        padding: const EdgeInsets.all(16),
+        padding: const EdgeInsets.all(AppSpacing.sm),
         children: [
           HomeCard(
             title: 'Chat with Trainer',
@@ -61,10 +63,8 @@ class GuruHomeScreen extends StatelessWidget {
             icon: Icons.calendar_month,
             onTap: () {
               Navigator.of(context).push(
-                MaterialPageRoute<void>(
-                  builder: (_) => const ScheduleCallScreen(
-                    primaryColor: AppColors.guruPrimary,
-                  ),
+                appPageRoute(
+                  const ScheduleCallScreen(primaryColor: AppColors.guruPrimary),
                 ),
               );
             },
@@ -76,8 +76,8 @@ class GuruHomeScreen extends StatelessWidget {
             icon: Icons.history,
             onTap: () {
               Navigator.of(context).push(
-                MaterialPageRoute<void>(
-                  builder: (_) => const SessionsListScreen(
+                appPageRoute(
+                  const SessionsListScreen(
                     currentUserId: SeedData.dkId,
                     isTrainerView: false,
                     primaryColor: AppColors.guruPrimary,

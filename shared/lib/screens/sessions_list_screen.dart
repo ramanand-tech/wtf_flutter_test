@@ -6,8 +6,12 @@ import '../models/session_log.dart';
 import '../services/app_services.dart';
 import '../utils/extensions.dart';
 import '../utils/session_log_utils.dart';
+import '../utils/spacing.dart';
 import '../utils/theme.dart';
+import '../widgets/app_buttons.dart';
 import '../widgets/empty_state.dart';
+import '../widgets/error_state.dart';
+import '../widgets/loading_skeleton.dart';
 
 class SessionsListScreen extends StatefulWidget {
   const SessionsListScreen({
@@ -28,11 +32,13 @@ class SessionsListScreen extends StatefulWidget {
 class _SessionsListScreenState extends State<SessionsListScreen> {
   SessionLogFilter _filter = SessionLogFilter.all;
   List<SessionLog> _allLogs = [];
+  bool _loading = true;
+  bool _syncError = false;
 
   @override
   void initState() {
     super.initState();
-    AppServices.instance.logs.pullRemote();
+    _load();
     AppServices.instance.logs.watchLogs().listen((_) {
       if (!mounted) return;
       setState(() {
@@ -40,14 +46,29 @@ class _SessionsListScreenState extends State<SessionsListScreen> {
           widget.currentUserId,
           isTrainer: widget.isTrainerView,
         );
+        _loading = false;
       });
+    });
+  }
+
+  Future<void> _load() async {
+    await AppServices.instance.logs.pullRemote();
+    if (!mounted) return;
+    setState(() {
+      _syncError = !AppServices.instance.syncClient.lastSessionsOk;
+      _loading = false;
+      _allLogs = AppServices.instance.logs.forUser(
+        widget.currentUserId,
+        isTrainer: widget.isTrainerView,
+      );
     });
   }
 
   List<SessionLog> get _filtered => filterSessionLogs(_allLogs, _filter);
 
   Future<void> _refresh() async {
-    await AppServices.instance.logs.pullRemote();
+    setState(() => _syncError = false);
+    await _load();
   }
 
   void _showDetail(SessionLog log) {
@@ -91,7 +112,8 @@ class _SessionsListScreenState extends State<SessionsListScreen> {
               Row(
                 children: [
                   Expanded(
-                    child: OutlinedButton.icon(
+                    child: AppSecondaryButton(
+                      label: 'Copy summary',
                       onPressed: () {
                         Clipboard.setData(ClipboardData(text: sessionLogShareText(log)));
                         Navigator.pop(ctx);
@@ -99,8 +121,6 @@ class _SessionsListScreenState extends State<SessionsListScreen> {
                           const SnackBar(content: Text('Summary copied')),
                         );
                       },
-                      icon: const Icon(Icons.share),
-                      label: const Text('Copy summary'),
                     ),
                   ),
                 ],
@@ -114,13 +134,28 @@ class _SessionsListScreenState extends State<SessionsListScreen> {
 
   @override
   Widget build(BuildContext context) {
+    if (_syncError) {
+      return Scaffold(
+        appBar: AppBar(title: Text(widget.isTrainerView ? 'Sessions' : 'My Sessions')),
+        body: ErrorState(
+          message: 'Session logs could not sync. Check token_server and retry.',
+          onRetry: _refresh,
+        ),
+      );
+    }
+
     return Scaffold(
       appBar: AppBar(title: Text(widget.isTrainerView ? 'Sessions' : 'My Sessions')),
       body: Column(
         crossAxisAlignment: CrossAxisAlignment.stretch,
         children: [
           Padding(
-            padding: const EdgeInsets.fromLTRB(16, 12, 16, 0),
+            padding: const EdgeInsets.fromLTRB(
+              AppSpacing.sm,
+              AppSpacing.sm,
+              AppSpacing.sm,
+              0,
+            ),
             child: Wrap(
               spacing: 8,
               children: SessionLogFilter.values.map((f) {
@@ -141,7 +176,9 @@ class _SessionsListScreenState extends State<SessionsListScreen> {
           Expanded(
             child: RefreshIndicator(
               onRefresh: _refresh,
-              child: _filtered.isEmpty
+              child: _loading
+                  ? const CardListSkeleton()
+                  : _filtered.isEmpty
                   ? ListView(
                       children: const [
                         SizedBox(height: 120),

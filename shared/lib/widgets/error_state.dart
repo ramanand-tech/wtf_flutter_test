@@ -3,19 +3,17 @@ import 'package:flutter/material.dart';
 import '../utils/spacing.dart';
 import 'app_buttons.dart';
 
-class EmptyState extends StatelessWidget {
-  const EmptyState({
+class ErrorState extends StatelessWidget {
+  const ErrorState({
     super.key,
-    required this.title,
-    required this.subtitle,
-    this.actionLabel,
-    this.onAction,
+    required this.message,
+    required this.onRetry,
+    this.title = 'Something went wrong',
   });
 
   final String title;
-  final String subtitle;
-  final String? actionLabel;
-  final VoidCallback? onAction;
+  final String message;
+  final VoidCallback onRetry;
 
   @override
   Widget build(BuildContext context) {
@@ -25,19 +23,22 @@ class EmptyState extends StatelessWidget {
         child: Column(
           mainAxisSize: MainAxisSize.min,
           children: [
-            Icon(Icons.chat_bubble_outline, size: 64, color: Colors.grey.shade400),
+            Icon(Icons.cloud_off, size: 56, color: Colors.grey.shade500),
             const SizedBox(height: AppSpacing.sm),
             Text(title, style: Theme.of(context).textTheme.headlineMedium),
             const SizedBox(height: AppSpacing.xs),
             Text(
-              subtitle,
+              message,
               textAlign: TextAlign.center,
               style: Theme.of(context).textTheme.bodyMedium,
             ),
-            if (actionLabel != null && onAction != null) ...[
-              const SizedBox(height: AppSpacing.sm),
-              AppPrimaryButton(label: actionLabel!, onPressed: onAction),
-            ],
+            const SizedBox(height: AppSpacing.md),
+            AppPrimaryButton(label: 'Retry', onPressed: onRetry, icon: Icons.refresh),
+            const SizedBox(height: AppSpacing.xs),
+            AppTertiaryButton(
+              label: 'Dismiss',
+              onPressed: () => Navigator.of(context).maybePop(),
+            ),
           ],
         ),
       ),

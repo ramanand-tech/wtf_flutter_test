@@ -57,4 +57,11 @@
 - **Output:** `SessionsListScreen`, `SyncLogService`, `/sync/sessions`, `session_log_utils_test`
 - **Used in:** `feat(sessions): logs list, filters, post-call rating`
 
+### Prompt #8
+
+- **Tool:** Cursor
+- **Intent:** Phase 8 UI polish — typography, 8pt spacing, skeletons, error/retry, button scale, page transitions
+- **Output:** `AppSpacing`, `loading_skeleton`, `error_state`, `app_buttons`, `appPageRoute`, chat bubble slide
+- **Used in:** `feat(ui): polish spacing, skeletons, motion, error states`
+
 <!-- Add entries as you build: debugging, refactors, etc. -->

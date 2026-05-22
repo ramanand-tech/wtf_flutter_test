@@ -56,6 +56,7 @@ wtf_flutter_test/
 | Scheduler (Phase 5) | Done — request / approve / decline + sync |
 | 100ms video (Phase 6) | Done — requires `token_server/.env` with real 100ms creds |
 | Session logs (Phase 7) | Done — filters, detail sheet, cross-app sync via `/sync/sessions` |
+| UI polish (Phase 8) | Done — 8pt spacing, skeletons, error+retry, motion, CTA hierarchy |
 
 ### Chat + schedule test (two apps)
 

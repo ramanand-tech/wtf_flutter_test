@@ -1,5 +1,8 @@
 import 'package:flutter/material.dart';
 
+import '../utils/spacing.dart';
+import 'app_buttons.dart';
+
 class HomeCard extends StatelessWidget {
   const HomeCard({
     super.key,
@@ -16,22 +19,21 @@ class HomeCard extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Card(
-      child: InkWell(
-        onTap: onTap,
-        borderRadius: BorderRadius.circular(12),
+    return ScaleOnPress(
+      onTap: onTap,
+      child: Card(
         child: Padding(
-          padding: const EdgeInsets.all(16),
+          padding: const EdgeInsets.all(AppSpacing.sm),
           child: Row(
             children: [
               Icon(icon, size: 32),
-              const SizedBox(width: 16),
+              const SizedBox(width: AppSpacing.sm),
               Expanded(
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
                     Text(title, style: Theme.of(context).textTheme.titleMedium),
-                    const SizedBox(height: 4),
+                    const SizedBox(height: AppSpacing.xs / 2),
                     Text(subtitle, style: Theme.of(context).textTheme.bodySmall),
                   ],
                 ),

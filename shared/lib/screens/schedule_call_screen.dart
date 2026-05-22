@@ -4,6 +4,7 @@ import '../services/app_services.dart';
 import '../utils/schedule_utils.dart';
 import '../utils/seed_data.dart';
 import '../utils/theme.dart';
+import '../utils/app_page_route.dart';
 import '../utils/validators.dart';
 import 'my_requests_screen.dart';
 
@@ -71,9 +72,7 @@ class _ScheduleCallScreenState extends State<ScheduleCallScreen> {
         ),
       );
       Navigator.of(context).pushReplacement(
-        MaterialPageRoute<void>(
-          builder: (_) => MyRequestsScreen(primaryColor: widget.primaryColor),
-        ),
+        appPageRoute(MyRequestsScreen(primaryColor: widget.primaryColor)),
       );
     } on StateError catch (e) {
       _showError(e.message);
@@ -97,9 +96,7 @@ class _ScheduleCallScreenState extends State<ScheduleCallScreen> {
           TextButton(
             onPressed: () {
               Navigator.of(context).push(
-                MaterialPageRoute<void>(
-                  builder: (_) => MyRequestsScreen(primaryColor: widget.primaryColor),
-                ),
+                appPageRoute(MyRequestsScreen(primaryColor: widget.primaryColor)),
               );
             },
             child: const Text('My Requests'),

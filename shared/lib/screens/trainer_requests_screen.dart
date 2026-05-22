@@ -7,6 +7,7 @@ import '../utils/extensions.dart';
 import '../utils/seed_data.dart';
 import '../utils/theme.dart';
 import '../widgets/empty_state.dart';
+import '../widgets/error_state.dart';
 import '../widgets/join_call_button.dart';
 import '../widgets/request_status_chip.dart';
 
@@ -31,8 +32,12 @@ class _TrainerRequestsScreenState extends State<TrainerRequestsScreen> {
     });
   }
 
+  bool _syncError = false;
+
   Future<void> _refresh() async {
     await AppServices.instance.calls.pullRemote();
+    if (!mounted) return;
+    setState(() => _syncError = !AppServices.instance.syncClient.lastCallsOk);
   }
 
   Future<void> _approve(CallRequest r) async {
@@ -109,7 +114,12 @@ class _TrainerRequestsScreenState extends State<TrainerRequestsScreen> {
 
     return Scaffold(
       appBar: AppBar(title: const Text('Call Requests')),
-      body: RefreshIndicator(
+      body: _syncError
+          ? ErrorState(
+              message: 'Could not sync requests. Start token_server and retry.',
+              onRetry: _refresh,
+            )
+          : RefreshIndicator(
         onRefresh: _refresh,
         child: _requests.isEmpty
             ? ListView(
