@@ -29,6 +29,9 @@ class _MeetingScreenState extends State<MeetingScreen> implements HMSUpdateListe
   final _sdk = HmsSdkHolder.instance.sdk;
   bool _joined = false;
   bool _reconnecting = false;
+  bool _ending = false;
+  bool _micOn = true;
+  bool _camOn = true;
   DateTime? _startedAt;
   String? _sessionLogId;
 
@@ -50,6 +53,16 @@ class _MeetingScreenState extends State<MeetingScreen> implements HMSUpdateListe
     await _sdk.join(config: config);
   }
 
+  Future<void> _toggleMic() async {
+    await _sdk.toggleMicMuteState();
+    if (mounted) setState(() => _micOn = !_micOn);
+  }
+
+  Future<void> _toggleCam() async {
+    await _sdk.toggleCameraMuteState();
+    if (mounted) setState(() => _camOn = !_camOn);
+  }
+
   void _updateVideoTrack(HMSPeer peer, HMSTrack track, HMSTrackUpdate update) {
     if (track.kind != HMSTrackKind.kHMSTrackKindVideo) return;
     final video = track as HMSVideoTrack;
@@ -62,9 +75,14 @@ class _MeetingScreenState extends State<MeetingScreen> implements HMSUpdateListe
   }
 
   Future<void> _endCall() async {
+    if (_ending) return;
+    _ending = true;
     final started = _startedAt ?? DateTime.now();
     final ended = DateTime.now();
-    await _sdk.leave();
+    try {
+      await _sdk.leave();
+    } catch (_) {}
+    _sdk.removeUpdateListener(listener: this);
     final log = await AppServices.instance.logs.createFromCall(
       memberId: widget.args.callRequest.memberId,
       trainerId: widget.args.callRequest.trainerId,
@@ -73,9 +91,10 @@ class _MeetingScreenState extends State<MeetingScreen> implements HMSUpdateListe
       callRequestId: widget.args.callRequest.id,
     );
     _sessionLogId = log.id;
-    HmsSdkHolder.instance.reset();
+    await AppServices.instance.logs.pullRemote();
+    await HmsSdkHolder.instance.reset();
     if (!mounted) return;
-    AppSnackbar.showSuccess(context, 'Session saved to your logs.');
+    AppSnackbar.showSuccess(context, 'Session saved. Check My Sessions / Sessions.');
     await _showPostCall();
     if (mounted) Navigator.of(context).popUntil((r) => r.isFirst);
   }
@@ -151,7 +170,11 @@ class _MeetingScreenState extends State<MeetingScreen> implements HMSUpdateListe
 
   @override
   void onRemovedFromRoom({required HMSPeerRemovedFromPeer hmsPeerRemovedFromPeer}) {
-    if (mounted) _endCall();
+    if (!mounted || _ending) return;
+    AppSnackbar.showInfo(
+      context,
+      'Other participant left. Tap the end button to save this session.',
+    );
   }
 
   @override
@@ -249,8 +272,16 @@ class _MeetingScreenState extends State<MeetingScreen> implements HMSUpdateListe
             child: Row(
               mainAxisAlignment: MainAxisAlignment.spaceEvenly,
               children: [
-                _control(Icons.mic, () => _sdk.toggleMicMuteState()),
-                _control(Icons.videocam, () => _sdk.toggleCameraMuteState()),
+                _control(
+                  _micOn ? Icons.mic : Icons.mic_off,
+                  _toggleMic,
+                  enabled: _micOn,
+                ),
+                _control(
+                  _camOn ? Icons.videocam : Icons.videocam_off,
+                  _toggleCam,
+                  enabled: _camOn,
+                ),
                 _control(Icons.cameraswitch, () => _sdk.switchCamera()),
                 if (isTrainer)
                   _control(Icons.call_end, _endCall, color: AppColors.error),
@@ -264,9 +295,15 @@ class _MeetingScreenState extends State<MeetingScreen> implements HMSUpdateListe
     );
   }
 
-  Widget _control(IconData icon, VoidCallback onTap, {Color? color}) {
+  Widget _control(
+    IconData icon,
+    VoidCallback onTap, {
+    Color? color,
+    bool enabled = true,
+  }) {
+    final bg = color ?? (enabled ? Colors.white24 : AppColors.error);
     return Material(
-      color: color ?? Colors.white24,
+      color: bg,
       shape: const CircleBorder(),
       child: InkWell(
         onTap: onTap,

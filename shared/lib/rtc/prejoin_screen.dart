@@ -37,6 +37,14 @@ class _PreJoinScreenState extends State<PreJoinScreen> implements HMSPreviewList
     _setup();
   }
 
+  @override
+  void dispose() {
+    try {
+      HmsSdkHolder.instance.sdk.removePreviewListener(listener: this);
+    } catch (_) {}
+    super.dispose();
+  }
+
   Future<void> _setup() async {
     final granted = await RtcPermissions.requestCallPermissions();
     if (!granted) {
@@ -140,6 +148,22 @@ class _PreJoinScreenState extends State<PreJoinScreen> implements HMSPreviewList
     required List<HMSPeer> removedPeers,
   }) {}
 
+  Widget _mediaToggle({
+    required bool enabled,
+    required IconData onIcon,
+    required IconData offIcon,
+    required VoidCallback? onPressed,
+  }) {
+    return IconButton.filled(
+      style: IconButton.styleFrom(
+        backgroundColor: enabled ? widget.args.primaryColor : AppColors.error,
+        foregroundColor: Colors.white,
+      ),
+      onPressed: onPressed,
+      icon: Icon(enabled ? onIcon : offIcon),
+    );
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -208,14 +232,18 @@ class _PreJoinScreenState extends State<PreJoinScreen> implements HMSPreviewList
             Row(
               mainAxisAlignment: MainAxisAlignment.center,
               children: [
-                IconButton.filled(
+                _mediaToggle(
+                  enabled: _micOn,
+                  onIcon: Icons.mic,
+                  offIcon: Icons.mic_off,
                   onPressed: _error == null ? _toggleMic : null,
-                  icon: Icon(_micOn ? Icons.mic : Icons.mic_off),
                 ),
                 const SizedBox(width: 16),
-                IconButton.filled(
+                _mediaToggle(
+                  enabled: _camOn,
+                  onIcon: Icons.videocam,
+                  offIcon: Icons.videocam_off,
                   onPressed: _error == null ? _toggleCam : null,
-                  icon: Icon(_camOn ? Icons.videocam : Icons.videocam_off),
                 ),
               ],
             ),

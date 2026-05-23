@@ -19,7 +19,13 @@ class HmsSdkHolder {
     _built = true;
   }
 
-  void reset() {
+  Future<void> reset() async {
+    final sdk = _sdk;
+    if (sdk != null) {
+      try {
+        await sdk.leave();
+      } catch (_) {}
+    }
     _sdk = null;
     _built = false;
   }

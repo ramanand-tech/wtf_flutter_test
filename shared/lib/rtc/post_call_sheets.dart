@@ -60,6 +60,7 @@ Future<void> showMemberPostCallSheet(
                   rating,
                   noteController.text.trim().isEmpty ? null : noteController.text.trim(),
                 );
+                await AppServices.instance.logs.pullRemote();
                 if (ctx.mounted) Navigator.pop(ctx);
               },
               child: const Text('Submit rating'),
@@ -106,6 +107,7 @@ Future<void> showTrainerPostCallSheet(BuildContext context, {required String log
                   logId,
                   notesController.text.trim(),
                 );
+                await AppServices.instance.logs.pullRemote();
                 if (ctx.mounted) Navigator.pop(ctx);
               },
               child: const Text('Mark as complete'),

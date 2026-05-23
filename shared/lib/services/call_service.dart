@@ -120,12 +120,7 @@ class SyncCallService implements CallService {
   @override
   List<CallRequest> upcomingForTrainer(String trainerId) {
     return _all()
-        .where(
-          (r) =>
-              r.trainerId == trainerId &&
-              r.status == CallRequestStatus.approved &&
-              r.scheduledFor.isAfter(DateTime.now().subtract(const Duration(hours: 1))),
-        )
+        .where((r) => r.trainerId == trainerId && canJoin(r))
         .toList()
       ..sort((a, b) => a.scheduledFor.compareTo(b.scheduledFor));
   }
@@ -133,12 +128,7 @@ class SyncCallService implements CallService {
   @override
   List<CallRequest> upcomingForMember(String memberId) {
     return _all()
-        .where(
-          (r) =>
-              r.memberId == memberId &&
-              r.status == CallRequestStatus.approved &&
-              r.scheduledFor.isAfter(DateTime.now().subtract(const Duration(hours: 1))),
-        )
+        .where((r) => r.memberId == memberId && canJoin(r))
         .toList()
       ..sort((a, b) => a.scheduledFor.compareTo(b.scheduledFor));
   }
@@ -238,11 +228,11 @@ class SyncCallService implements CallService {
   @override
   bool canJoin(CallRequest request) {
     if (request.status != CallRequestStatus.approved) return false;
-    final diff = request.scheduledFor.difference(DateTime.now());
+    final minutesUntil = request.scheduledFor.difference(DateTime.now()).inMinutes;
     if (kDebugMode) {
-      // Easier manual testing: any approved call within ~48h window
-      return diff.inHours <= 48 && diff.inHours >= -2;
+      // Dev/testing: join up to 24h before or 6h after scheduled slot
+      return minutesUntil <= 24 * 60 && minutesUntil >= -6 * 60;
     }
-    return diff.inMinutes <= 10 && diff.inMinutes >= -60;
+    return minutesUntil <= 10 && minutesUntil >= -60;
   }
 }
